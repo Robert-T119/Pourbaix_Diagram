@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta name="viewport" content="width=1300" />
+    {% load plotly_dash%}
+    {% plotly_header %}
+    <!-- <link rel="stylesheet" type=”text/css”
+        href="{% static 'styles.css' }"/> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style type="text/css">
+        body {
+            margin-left: 8px;
+            margin-right: 8px;
+            margin-bottom:-1500px;
+            font-family: "Segoe UI";
+            background-color: #10328f;
+        }
+        .rc-slider-track {
+            background-color: #10328f;
+        }
+
+        .rc-slider-dot-active {
+          border-color: #ff7675;
+          border: solid 2px #2d3436;
+        }
+
+        .rc-slider-handle {
+          background-color: #ff7675;
+          border-color: #ff7675;
+        }
+
+        .rc.slider-handle:hover {
+          border-color: #ff7675;
+        }
+
+        .rc.slider-handle-active:active {
+          border-color: #ff7675;
+        }
+        #description {
+            padding: 10px 15px 10px;
+            border: grey;
+            margin-bottom: 500px;
+            background-color: rgb(254,252,235);
+        }
+        .data1 {
+              min-width: 400px;
+              margin-top:-970px;
+              margin-left:620px;
+              background-color: rgb(250, 250, 250);
+         }
+         .data1 caption {
+            text-align: center;
+            margin-top: -10px;
+         }
+         .data1 th {
+             text-align: left;
+         }
+         .data1 table, th, td{
+             border: 1px solid #000;
+             border-collapse: collapse;
+         }
+        .data1 th, td{
+             padding: 10px;
+         }
+
+         .data2 {
+              min-width: 400px;
+              #margin-top: 50px;
+              margin-left:620px;
+              background-color: rgb(250, 250, 250);
+         }
+         .data2 th {
+             text-align :left;
+         }
+         .data2 table, th, td{
+             border:1px solid #000;
+             border-collapse: collapse;
+         }
+        .data2 th, td{
+             padding: 10px;
+         }
+        .methods:hover {
+            color: #ff7675;
+            transition: 0.3s all ease;
+            text-decoration: none;
+            animation: pulse 1s infinite;
+            animation-timing-function: linear;
+        }
+        .methods:hover {
+            color: #ff7675;
+            transition: 0.3s all ease;
+            text-decoration: none;
+            animation: pulse 1s infinite;
+            animation-timing-function: linear;
+        }
+        .navbar {
+            content:"";
+            margin-left: -10px;
+            margin-right: -10px;
+            margin-bottom: 15px;
+            padding-top: 3px;
+            padding-bottom: 4px;
+            background-color: rgb(250, 250, 250);
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
+        .home {
+            content:"";
+            display: block;
+            color: #2d3436;
+            /* text-transform: uppercase; */
+            font-style: bold;
+            font-size: 17px;
+            transition: 1s all ease;
+            text-decoration: none;
+        }
+        .home:hover {
+            color: #ff7675;
+            transition: 0.3s all ease;
+            text-decoration: none;
+            animation: pulse 1s infinite;
+            animation-timing-function: linear;
+        }
+        @keyframes pulse {
+              0% { transform: scale(1); }
+              50% { transform: scale(1.1);
+              100% { transform: scale(1); }
+              }
+            }
+        .navbar:after{
+            content: "";
+            position: absolute;
+            z-index: -1;
+            right: 0;
+            width: 0;
+            bottom: -5px;
+            background: #ff7675;;
+            height: 4px;
+            transition-property: width;
+            transition-duration: 1s;
+            transition-timing-function: ease-out;
+        }
+        .navbar:hover:after,
+        .navbar:focus:after,
+        .navbar:active:after {
+            left: 0;
+            right: auto;
+            width: 100%;
+        }
+
+        .modebar{
+            display: none !important;
+        }
+        #background-wrap {
+            bottom: 0;
+            left: 0;
+            position: fixed;
+            right: 0;
+            top: 0;
+            z-index: -1;
+        }
+
+        /* KEYFRAMES */
+        @-webkit-keyframes animateBubble {
+            0% {
+                margin-top: 1000px;
+            }
+            100% {
+                margin-top: -100%;
+            }
+        }
+
+        @-moz-keyframes animateBubble {
+            0% {
+                margin-top: 1000px;
+            }
+            100% {
+                margin-top: -100%;
+            }
+        }
+
+        @keyframes animateBubble {
+            0% {
+                margin-top: 1000px;
+            }
+            100% {
+                margin-top: -100%;
+            }
+        }
+
+        @-webkit-keyframes sideWays {
+            0% {
+                margin-left:0px;
+            }
+            100% {
+                margin-left:50px;
+            }
+        }
+
+        @-moz-keyframes sideWays {
+            0% {
+                margin-left:0px;
+            }
+            100% {
+                margin-left:50px;
+            }
+        }
+
+        @keyframes sideWays {
+            0% {
+                margin-left:0px;
+            }
+            100% {
+                margin-left:50px;
+            }
+        }
+
+        /* ANIMATIONS */
+
+        .x1 {
+            -webkit-animation: animateBubble 25s linear infinite, sideWays 2s ease-in-out infinite alternate;
+            -moz-animation: animateBubble 25s linear infinite, sideWays 2s ease-in-out infinite alternate;
+            animation: animateBubble 25s linear infinite, sideWays 2s ease-in-out infinite alternate;
+
+            left: -5%;
+            top: 5%;
+
+            -webkit-transform: scale(0.6);
+            -moz-transform: scale(0.6);
+            transform: scale(0.6);
+        }
+
+        .x2 {
+            -webkit-animation: animateBubble 20s linear infinite, sideWays 4s ease-in-out infinite alternate;
+            -moz-animation: animateBubble 20s linear infinite, sideWays 4s ease-in-out infinite alternate;
+            animation: animateBubble 20s linear infinite, sideWays 4s ease-in-out infinite alternate;
+
+            left: 5%;
+            top: 80%;
+
+            -webkit-transform: scale(0.4);
+            -moz-transform: scale(0.4);
+            transform: scale(0.4);
+        }
+
+        .x3 {
+            -webkit-animation: animateBubble 28s linear infinite, sideWays 2s ease-in-out infinite alternate;
+            -moz-animation: animateBubble 28s linear infinite, sideWays 2s ease-in-out infinite alternate;
+            animation: animateBubble 28s linear infinite, sideWays 2s ease-in-out infinite alternate;
+
+            left: 10%;
+            top: 40%;
+
+            -webkit-transform: scale(0.7);
+            -moz-transform: scale(0.7);
+            transform: scale(0.7);
+        }
+
+        .x4 {
+            -webkit-animation: animateBubble 22s linear infinite, sideWays 3s ease-in-out infinite alternate;
+            -moz-animation: animateBubble 22s linear infinite, sideWays 3s ease-in-out infinite alternate;
+            animation: animateBubble 22s linear infinite, sideWays 3s ease-in-out infinite alternate;
+
+            left: 20%;
+            top: 0;
+
+            -webkit-transform: scale(0.3);
+            -moz-transform: scale(0.3);
+            transform: scale(0.3);
+        }
+
+        .x5 {
+            -webkit-animation: animateBubble 29s linear infinite, sideWays 4s ease-in-out infinite alternate;
+            -moz-animation: animateBubble 29s linear infinite, sideWays 4s ease-in-out infinite alternate;
+            animation: animateBubble 29s linear infinite, sideWays 4s ease-in-out infinite alternate;
+
+            left: 30%;
+            top: 50%;
+
+            -webkit-transform: scale(0.5);
+            -moz-transform: scale(0.5);
+            transform: scale(0.5);
+        }
+
+        .x6 {
+            -webkit-animation: animateBubble 21s linear infinite, sideWays 2s ease-in-out infinite alternate;
+            -moz-animation: animateBubble 21s linear infinite, sideWays 2s ease-in-out infinite alternate;
+            animation: animateBubble 21s linear infinite, sideWays 2s ease-in-out infinite alternate;
+
+            left: 50%;
+            top: 0;
+
+            -webkit-transform: scale(0.8);
+            -moz-transform: scale(0.8);
+            transform: scale(0.8);
+        }
+
+        .x7 {
+            -webkit-animation: animateBubble 20s linear infinite, sideWays 2s ease-in-out infinite alternate;
+            -moz-animation: animateBubble 20s linear infinite, sideWays 2s ease-in-out infinite alternate;
+            animation: animateBubble 20s linear infinite, sideWays 2s ease-in-out infinite alternate;
+
+            left: 65%;
+            top: 70%;
+
+            -webkit-transform: scale(0.4);
+            -moz-transform: scale(0.4);
+            transform: scale(0.4);
+        }
+
+        .x8 {
+            -webkit-animation: animateBubble 22s linear infinite, sideWays 3s ease-in-out infinite alternate;
+            -moz-animation: animateBubble 22s linear infinite, sideWays 3s ease-in-out infinite alternate;
+            animation: animateBubble 22s linear infinite, sideWays 3s ease-in-out infinite alternate;
+
+            left: 80%;
+            top: 10%;
+
+            -webkit-transform: scale(0.3);
+            -moz-transform: scale(0.3);
+            transform: scale(0.3);
+        }
+
+        .x9 {
+            -webkit-animation: animateBubble 29s linear infinite, sideWays 4s ease-in-out infinite alternate;
+            -moz-animation: animateBubble 29s linear infinite, sideWays 4s ease-in-out infinite alternate;
+            animation: animateBubble 29s linear infinite, sideWays 4s ease-in-out infinite alternate;
+
+            left: 90%;
+            top: 50%;
+
+            -webkit-transform: scale(0.6);
+            -moz-transform: scale(0.6);
+            transform: scale(0.6);
+        }
+
+        .x10 {
+            -webkit-animation: animateBubble 26s linear infinite, sideWays 2s ease-in-out infinite alternate;
+            -moz-animation: animateBubble 26s linear infinite, sideWays 2s ease-in-out infinite alternate;
+            animation: animateBubble 26s linear infinite, sideWays 2s ease-in-out infinite alternate;
+
+            left: 80%;
+            top: 80%;
+
+            -webkit-transform: scale(0.3);
+            -moz-transform: scale(0.3);
+            transform: scale(0.3);
+        }
+
+        /* OBJECTS */
+
+        .bubble {
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+
+            -webkit-box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2), inset 0px 10px 30px 5px rgba(255, 255, 255, 1);
+            -moz-box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2), inset 0px 10px 30px 5px rgba(255, 255, 255, 1);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2), inset 0px 10px 30px 5px rgba(255, 255, 255, 1);
+
+            height: 200px;
+            position: absolute;
+            width: 200px;
+        }
+
+        .bubble:after {
+            background: -moz-radial-gradient(center, ellipse cover,  rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%); /* FF3.6+ */
+            background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(255,255,255,0.5)), color-stop(70%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+            background: -webkit-radial-gradient(center, ellipse cover,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 70%); /* Chrome10+,Safari5.1+ */
+            background: -o-radial-gradient(center, ellipse cover,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 70%); /* Opera 12+ */
+            background: -ms-radial-gradient(center, ellipse cover,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 70%); /* IE10+ */
+            background: radial-gradient(ellipse at center,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 70%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+
+            -webkit-box-shadow: inset 0 20px 30px rgba(255, 255, 255, 0.3);
+            -moz-box-shadow: inset 0 20px 30px rgba(255, 255, 255, 0.3);
+            box-shadow: inset 0 20px 30px rgba(255, 255, 255, 0.3);
+
+            content: "";
+            height: 180px;
+            left: 10px;
+            position: absolute;
+            width: 180px;
+        }
+    </style>
+    </head>
+
+    <body>
+        <div id="background-wrap">
+            <div class="bubble x1"></div>
+            <div class="bubble x2"></div>
+            <div class="bubble x3"></div>
+            <div class="bubble x4"></div>
+            <div class="bubble x5"></div>
+            <div class="bubble x6"></div>
+            <div class="bubble x7"></div>
+            <div class="bubble x8"></div>
+            <div class="bubble x9"></div>
+            <div class="bubble x10"></div>
+        </div>
+
+        <div class='navbar'>
+            <a href="{% url 'home' %}" class='home'>Home</a>
+            <a href='#description' class='methods'>Methods</a>
+        </div>
+
+        {% plotly_direct name="copper" %}
+
+        <div id='description'>
+            <h3 style="color:#10328f"> <b>Description of method</b> </h3>
+            <h5 style="color:#10328f">—Mass Balance: </h5>
+            <p> [Cu<sup>II</sup>]<sub>Total</sub>  = [Cu<sup>2+</sup>] + [Cu(OH)<sub>2</sub>] + [HCuO<sub>2</sub><sup>-</sup>] + [CuO<sub>2</sub><sup>2-</sup>] </p>
+            <p> [Cu<sup>II</sup>]<sub>Total</sub>  = [Cu<sup>2+</sup>] + [CuO] + [HCuO<sub>2</sub><sup>-</sup>] + [CuO<sub>2</sub><sup>2-</sup>]</p>
+            <h5 style="color:#10328f"> —Chemical reactions:</h5>
+            <p> 1. CuO + 2H<sup>+</sup> = Cu<sup>2+</sup> + H<sub>2</sub>O</p>
+            <p> 2. Cu(OH)<sub>2</sub> + 2H<sup>+</sup>  = Cu<sup>2+</sup> + 2H<sub>2</sub>O</p>
+            <p> 3. CuO + H<sub>2</sub>O = HCuO<sub>2</sub><sup>-</sup> +H<sup>+</sup> </p>
+            <p> 4. CuO + H<sub>2</sub>O = CuO<sub>2</sub><sup>2-</sup> + 2H<sup>+</sup> </p>
+            <p> 5. Cu(OH)<sub>2</sub> + H<sub>2</sub>O = HCuO<sub>2</sub><sup>-</sup> + H<sup>+</sup> </p>
+            <p> 6. Cu(OH)<sub>2</sub> = CuO<sub>2</sub><sup>2-</sup> + 2H<sup>+</sup> </p>
+            <p> 7. HCuO<sub>2</sub><sup>-</sup> = CuO<sub>2</sub><sup>2-</sup> + H<sup>+</sup> </p>
+            <p> 8. Cu<sup>2+</sup> + 2H<sub>2</sub>O = CuO<sub>2</sub><sup>2-</sup> + 4H<sup>+</sup> </p>
+            <p> 9. Cu<sup>2+</sup> + 2H<sub>2</sub>O = HCuO<sub>2</sub><sup>-</sup> + 3H<sup>+</sup> </p>
+            <p> 10. Cu<sub>2</sub>O + 2H<sup>+</sup> = 2Cu<sup>+</sup> + H<sub>2</sub>O </p>
+            <p> 11. 2Cu<sup>2+</sup> = Cu<sup>2+</sup> + Cu</p>
+
+            <h5 style="color:#10328f"> —Electrochemical reactions: </h5>
+            <p> 1. Cu<sup>2+</sup> + e<sup>-</sup> = Cu<sup>+</sup> </p>
+            <p> 2. Cu<sup>2+</sup> + 2e<sup>-</sup> = Cu </p>
+            <p> 3. 2Cu<sup>2+</sup> + 2H<sub>2</sub>O +2e<sup>-</sup> = Cu<sub>2</sub>O + 2H<sup>+</sup> </p>
+            <p> 4. 2CuO + 2H<sup>+</sup> +2e<sup>-</sup> = Cu<sub>2</sub>O + H<sub>2</sub>O </p>
+            <p> 5. Cu<sub>2</sub>O + 2H<sup>+</sup> +2e<sup>-</sup> = 2Cu + H<sub>2</sub>O </p>
+            <p> 6. 2HCuO<sub>2</sub><sup>-</sup> + 2H<sup>+</sup> + 2e<sup>-</sup> = Cu<sub>2</sub>O + 2H<sub>2</sub>O </p>
+            <p> 7. 2CuO<sub>2</sub><sup>2-</sup> + 6H<sup>+</sup> + 2e<sup>-</sup> = Cu<sub>2</sub>O + 3H<sub>2</sub>O </p>
+            <p> 8. CuO<sub>2</sub><sup>2-</sup> + 4H<sup>+</sup> + 2e<sup>-</sup> = Cu + 2H<sub>2</sub>O </p>
+            <p> 9. O<sub>2</sub> + 4H<sup>+</sup> + 4e<sup>-</sup> = 2H<sub>2</sub>O </p>
+            <p> 10. 2H<sup>+</sup> + 2e<sup>-</sup> = H<sub>2</sub> </p>
+            <br>
+             <table class="data1">
+            <caption> Known information</caption>
+            <tr>
+                <th> Parameter </th>
+                <th> Symbol </th>
+                <th> Value </th>
+                <th> Units </th>
+            </tr>
+            <tr>
+                <td> Gas Constant</td>
+                <td> R </td>
+                <td> 8.31434 </td>
+                <td> Jmol<sup>-1</sup>K<sup>-1</sup></td>
+            </tr>
+            <tr>
+                <td> Absolute temperature</td>
+                <td> T </td>
+                <td> 298.15 </td>
+                <td> K </td>
+            </tr>
+            <tr>
+                <td> Faraday Constant</td>
+                <td> F </td>
+                <td> 96484.6 </td>
+                <td> As mol<sup>-1</sup></td>
+            </tr>
+            <tr>
+                <td> Molar mass of Ni</td>
+                <td> M(Cu) </td>
+                <td> 63.546 </td>
+                <td> g mol<sup>-1</sup></td>
+            </tr>
+            <tr>
+                <td> Pressure of Oxygen</td>
+                <td> P(O<sub>2</sub>) </td>
+                <td> 1.00 </td>
+                <td> atm </td>
+            </tr>
+            <tr>
+                <td> Pressure of Hydrogen</td>
+                <td> P(H<sub>2</sub>) </td>
+                <td> 1.00 </td>
+                <td> atm </td>
+            </tr>
+            </table>
+
+        <table class="data2">
+                <caption> Data from: Standard Potentials in Aqueous Solution, A.J.Bard, R.Parsons and J.Jordan, Eds., Marcel Dekker, New York, 1985.  </caption>
+                <tr>
+                    <th> Species </th>
+                    <th>  ΔG<sub>f</sub><sup>0</sup>(298k)/J mol<sup>-1</sup></th>
+                </tr>
+                <tr>
+                    <td> Cu<sup>+</sup> </td>
+                    <td> 50300 </td>
+                </tr>
+                <tr>
+                    <td> Cu <sup>2+</sup></td>
+                    <td> 65700 </td>
+                </tr>
+                <tr>
+                    <td> Cu<sub>2</sub>O </td>
+                    <td> -148100 </td>
+                </tr>
+                <tr>
+                    <td> CuO </td>
+                    <td> -134000 </td>
+                </tr>
+                <tr>
+                    <td> Cu(OH)<sub>2</sub>(c)</td>
+                    <td> -359500 </td>
+                </tr>
+                <tr>
+                    <td> HCuO<sub>2</sub><sup>-</sup> </td>
+                    <td> -258900 </td>
+                </tr>
+                <tr>
+                    <td> CuO<sub>2</sub><sup>-</sup> </td>
+                    <td> -183900 </td>
+                </tr>
+                <tr>
+                    <td> CuS </td>
+                    <td> -53200 </td>
+                </tr>
+                <tr>
+                    <td> Cu<sub>2</sub>S </td>
+                    <td> -87600 </td>
+                </tr>
+                <tr>
+                    <td> OH<sup>-</sup> </td>
+                    <td> -157293 </td>
+                </tr>
+                <tr>
+                    <td> H <sub>2</sub>O </td>
+                    <td> -237178 </td>
+                </tr>
+        </table>
+        <p><br></p>
+        </div>
+    </body>
+    {% plotly_footer %}
+</html>
